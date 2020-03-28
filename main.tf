@@ -1,13 +1,13 @@
 provider "vsphere" {
-  user           = "********************"
-  password       = "******"
-  vsphere_server = "192.168.25.XXX"
+  user           = "administrator@vsphere.local"
+  password       = "XXXXXXX"
+  vsphere_server = "192.XXXXXXXXXXX"
 
   # If you have a self-signed cert
   allow_unverified_ssl = true
 }
 data "vsphere_datacenter" "dc" {
-  name = "rahul-dc"
+  name = "iq"
 }
 
 data "vsphere_datastore" "datastore" {
@@ -16,7 +16,7 @@ data "vsphere_datastore" "datastore" {
 }
 
 data "vsphere_compute_cluster" "cluster" {
-  name          = "rahul-cluster"
+  name          = "iq-cluster"
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
 
@@ -25,7 +25,7 @@ data "vsphere_network" "network" {
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
 data "vsphere_virtual_machine" "template_from_ovf" {
-  name          = "rahul-vm"
+  name          = "Rahul-ACS-25.14"
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
 #test 
@@ -37,7 +37,7 @@ resource "vsphere_virtual_machine" "vm" {
 
   num_cpus = 1
   memory   = 1024
-  guest_id = "other3xLinux64Guest"
+  guest_id = "centos7_64Guest"
 
   network_interface {
     network_id = "${data.vsphere_network.network.id}"
@@ -45,7 +45,7 @@ resource "vsphere_virtual_machine" "vm" {
 
   disk {
     label = "disk0"
-    size  = 10
+    size  = 160
   }
   clone {
     template_uuid = "${data.vsphere_virtual_machine.template_from_ovf.id}"
